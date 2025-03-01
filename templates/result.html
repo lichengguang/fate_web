@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>八字排盘结果</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    <style>
+        .bazi-grid {
+            display: grid;
+            grid-template-columns: auto repeat(4, 1fr);
+            grid-template-rows: auto 1fr;
+            gap: 1rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .bazi-header {
+            grid-column: 2 / -1;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            padding: 0.5rem;
+            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+        }
+
+        .bazi-side-labels {
+            grid-row: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            padding: 0.5rem;
+            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+            border-radius: 4px;
+            margin-right: 0.5rem;
+        }
+
+        .bazi-header .bazi-label,
+        .bazi-side-labels .bazi-label {
+            font-weight: bold;
+            color: #495057;
+            padding: 0.5rem;
+            background: rgba(255,255,255,0.8);
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .bazi-column {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* 统一字体大小和样式 */
+        .tiangan, .dizhi, .canggan {
+            font-size: 1.2em;
+            font-weight: bold;
+            transition: all 0.2s ease;
+        }
+
+        /* 藏干稍小一些 */
+        .canggan {
+            font-size: 0.9em;
+            color: #666;
+            padding: 2px 4px;
+            border-radius: 3px;
+            background: rgba(255,255,255,0.7);
+        }
+
+        .wood { color: #4CAF50; }
+        .fire { color: #F44336; }
+        .earth { color: #795548; }
+        .metal { color: #FFD700; }
+        .water { color: #2196F3; }
+        .bazi-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s ease;
+            border: 1px solid #eee;
+        }
+
+        .year-column {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-color: #ddd;
+        }
+
+        .year-column:hover {
+            background: linear-gradient(135deg, #e9ecef, #f8f9fa);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            transform: scale(1.02);
+            z-index: 1;
+            transition: all 0.3s ease;
+        }
+        .bazi-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-color: #ddd;
+            transition: all 0.3s ease;
+        }
+        .bazi-column > div {
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin: 2px 0;
+        }
+        .tiangan {
+            background: rgba(255,255,255,0.9);
+        }
+        .dizhi {
+            background: rgba(255,255,255,0.8);
+        }
+        .canggan {
+            background: rgba(255,255,255,0.7);
+        }
+        .bazi-label {
+            color: #666;
+            font-size: 0.9em;
+        }
+        .bazi-value {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+        .wuxing-detail {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+        /* 五行颜色定义 */
+        .wuxing-wood { color: #4CAF50; }  /* 木：绿色 */
+        .wuxing-fire { color: #F44336; }  /* 火：红色 */
+        .wuxing-earth { color: #795548; } /* 土：棕色 */
+        .wuxing-metal { color: #FFD700; } /* 金：金色 */
+        .wuxing-water { color: #2196F3; } /* 水：蓝色 */
+        .yun-table {
+            margin-top: 30px;
+        }
+        .yun-table th {
+            background: #f8f9fa;
+        }
+        .footer-actions {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="card-title">八字排盘结果</h4>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="mb-3">八字信息</h5>
+        <div class="bazi-grid">
+            <!-- 顶部标题 -->
+            <div class="bazi-header">
+                <div class="bazi-label">年</div>
+                <div class="bazi-label">月</div>
+                <div class="bazi-label">日</div>
+                <div class="bazi-label">时</div>
+            </div>
+            
+            <!-- 左侧标题 -->
+            <div class="bazi-side-labels">
+                <div class="bazi-label">天干</div>
+                <div class="bazi-label">地支</div>
+                <div class="bazi-label">藏干</div>
+            </div>
+
+            <!-- 年柱 -->
+            <div class="bazi-item year-column">
+                <div class="bazi-column">
+                    <div class="tiangan wuxing-{{ bazi[0].tiangan.wuxing }}">
+                        {{ bazi[0].tiangan.name }}
+                    </div>
+                    <div class="dizhi wuxing-{{ bazi[0].dizhi.wuxing }}">
+                        {{ bazi[0].dizhi.name }}
+                    </div>
+                    {% for cg in bazi[0].dizhi.canggan %}
+                    <div class="canggan wuxing-{{ cg.wuxing }}">
+                        {{ cg.name }}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+                            <div class="bazi-item">
+                                <div class="bazi-column">
+                                    <div class="tiangan wuxing-{{ bazi[1].tiangan.wuxing }}">
+                                        {{ bazi[1].tiangan.name }}
+                                    </div>
+                                    <div class="dizhi wuxing-{{ bazi[1].dizhi.wuxing }}">
+                                        {{ bazi[1].dizhi.name }}
+                                    </div>
+                                    {% for cg in bazi[1].dizhi.canggan %}
+                                    <div class="canggan wuxing-{{ cg.wuxing }}">
+                                        {{ cg.name }}
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="bazi-item">
+                                <div class="bazi-column">
+                                    <div class="tiangan wuxing-{{ bazi[2].tiangan.wuxing }}">
+                                        {{ bazi[2].tiangan.name }}
+                                    </div>
+                                    <div class="dizhi wuxing-{{ bazi[2].dizhi.wuxing }}">
+                                        {{ bazi[2].dizhi.name }}
+                                    </div>
+                                    {% for cg in bazi[2].dizhi.canggan %}
+                                    <div class="canggan wuxing-{{ cg.wuxing }}">
+                                        {{ cg.name }}
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="bazi-item">
+                                <div class="bazi-column">
+                                    <div class="tiangan wuxing-{{ bazi[3].tiangan.wuxing }}">
+                                        {{ bazi[3].tiangan.name }}
+                                    </div>
+                                    <div class="dizhi wuxing-{{ bazi[3].dizhi.wuxing }}">
+                                        {{ bazi[3].dizhi.name }}
+                                    </div>
+                                    {% for cg in bazi[3].dizhi.canggan %}
+                                    <div class="canggan wuxing-{{ cg.wuxing }}">
+                                        {{ cg.name }}
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <h5 class="mt-4 mb-3">大运信息</h5>
+                        <table class="table yun-table">
+                            <thead>
+                                <tr>
+                                    <th>大运</th>
+                                    <th>起止年份</th>
+                                    <th>流年</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for yun in yun_list %}
+                                <tr>
+                                    <td>{{ yun.yun }}</td>
+                                    <td>{{ yun.start_year }} - {{ yun.end_year }}</td>
+                                    <td>
+                                        <div class="liunian-list">
+                                            {% for liu in yun.liunian %}
+                                            <span class="badge bg-secondary me-1">{{ liu }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        <div class="footer-actions text-center">
+                            <a href="/" class="btn btn-primary">重新排盘</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // 添加tooltip提示
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+
+        // 打印功能
+        function printBazi() {
+            window.print()
+        }
+
+        // 添加打印按钮
+        const footerActions = document.querySelector('.footer-actions')
+        const printBtn = document.createElement('button')
+        printBtn.className = 'btn btn-secondary ms-2'
+        printBtn.textContent = '打印结果'
+        printBtn.onclick = printBazi
+        footerActions.appendChild(printBtn)
+    </script>
+</body>
+</html>

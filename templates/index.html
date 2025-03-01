@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>八字排盘</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="card-title text-center">八字排盘系统</h4>
+                    </div>
+                    <div class="card-body">
+                        <form action="/calculate" method="POST">
+                            <div class="mb-3">
+                                <label for="birth_date" class="form-label">出生日期</label>
+                                <input type="date" class="form-control" id="birth_date" name="birth_date" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="birth_time" class="form-label">出生时间</label>
+                                <input type="time" class="form-control" id="birth_time" name="birth_time" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">性别</label>
+                                <div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="gender" id="male" value="男" checked>
+                                        <label class="form-check-label" for="male">男</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="gender" id="female" value="女">
+                                        <label class="form-check-label" for="female">女</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">开始排盘</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/zh.js"></script>
+    <script>
+        flatpickr("#birth_date", {
+            locale: "zh",
+            dateFormat: "Y-m-d",
+            defaultDate: "1990-01-01",
+            maxDate: "today"
+        });
+
+        flatpickr("#birth_time", {
+            locale: "zh",
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            time_24hr: true
+        });
+    </script>
+</body>
+</html>
