@@ -223,3 +223,25 @@ body {
 .fade-in {
     animation: fadeIn 0.5s ease;
 }
+
+/* 五行颜色样式 */
+.wuxing-wood { 
+    color: #4CAF50;
+    background-color: rgba(76, 175, 80, 0.1);
+}
+.wuxing-fire { 
+    color: #F44336;
+    background-color: rgba(244, 67, 54, 0.1);
+}
+.wuxing-earth { 
+    color: #795548;
+    background-color: rgba(121, 85, 72, 0.1);
+}
+.wuxing-metal { 
+    color: #FFD700;
+    background-color: rgba(255, 215, 0, 0.1);
+}
+.wuxing-water { 
+    color: #2196F3;
+    background-color: rgba(33, 150, 243, 0.1);
+}

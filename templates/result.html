@@ -55,27 +55,20 @@
             gap: 0.5rem;
         }
 
-        /* 统一字体大小和样式 */
         .tiangan, .dizhi, .canggan {
             font-size: 1.2em;
             font-weight: bold;
             transition: all 0.2s ease;
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin: 2px 0;
         }
 
-        /* 藏干稍小一些 */
         .canggan {
             font-size: 0.9em;
-            color: #666;
-            padding: 2px 4px;
-            border-radius: 3px;
             background: rgba(255,255,255,0.7);
         }
 
-        .wood { color: #4CAF50; }
-        .fire { color: #F44336; }
-        .earth { color: #795548; }
-        .metal { color: #FFD700; }
-        .water { color: #2196F3; }
         .bazi-item {
             background: #f8f9fa;
             padding: 15px;
@@ -91,59 +84,22 @@
             border-color: #ddd;
         }
 
-        .year-column:hover {
-            background: linear-gradient(135deg, #e9ecef, #f8f9fa);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-            transform: scale(1.02);
-            z-index: 1;
-            transition: all 0.3s ease;
-        }
+        .year-column:hover,
         .bazi-item:hover {
             transform: translateY(-5px);
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             border-color: #ddd;
             transition: all 0.3s ease;
         }
-        .bazi-column > div {
-            padding: 8px 12px;
-            border-radius: 4px;
-            margin: 2px 0;
-        }
-        .tiangan {
-            background: rgba(255,255,255,0.9);
-        }
-        .dizhi {
-            background: rgba(255,255,255,0.8);
-        }
-        .canggan {
-            background: rgba(255,255,255,0.7);
-        }
-        .bazi-label {
-            color: #666;
-            font-size: 0.9em;
-        }
-        .bazi-value {
-            font-size: 1.2em;
-            font-weight: bold;
-            margin: 5px 0;
-        }
-        .wuxing-detail {
-            font-size: 0.9em;
-            color: #666;
-            margin-top: 5px;
-        }
-        /* 五行颜色定义 */
-        .wuxing-wood { color: #4CAF50; }  /* 木：绿色 */
-        .wuxing-fire { color: #F44336; }  /* 火：红色 */
-        .wuxing-earth { color: #795548; } /* 土：棕色 */
-        .wuxing-metal { color: #FFD700; } /* 金：金色 */
-        .wuxing-water { color: #2196F3; } /* 水：蓝色 */
+
         .yun-table {
             margin-top: 30px;
         }
+
         .yun-table th {
             background: #f8f9fa;
         }
+
         .footer-actions {
             margin-top: 30px;
             padding-top: 20px;
@@ -161,83 +117,40 @@
                     </div>
                     <div class="card-body">
                         <h5 class="mb-3">八字信息</h5>
-        <div class="bazi-grid">
-            <!-- 顶部标题 -->
-            <div class="bazi-header">
-                <div class="bazi-label">年</div>
-                <div class="bazi-label">月</div>
-                <div class="bazi-label">日</div>
-                <div class="bazi-label">时</div>
-            </div>
-            
-            <!-- 左侧标题 -->
-            <div class="bazi-side-labels">
-                <div class="bazi-label">天干</div>
-                <div class="bazi-label">地支</div>
-                <div class="bazi-label">藏干</div>
-            </div>
+                        <div class="bazi-grid">
+                            <div class="bazi-header">
+                                <div class="bazi-label">年</div>
+                                <div class="bazi-label">月</div>
+                                <div class="bazi-label">日</div>
+                                <div class="bazi-label">时</div>
+                            </div>
+                            
+                            <div class="bazi-side-labels">
+                                <div class="bazi-label">天干</div>
+                                <div class="bazi-label">地支</div>
+                                <div class="bazi-label">藏干</div>
+                            </div>
 
-            <!-- 年柱 -->
-            <div class="bazi-item year-column">
-                <div class="bazi-column">
-                    <div class="tiangan wuxing-{{ bazi[0].tiangan.wuxing }}">
-                        {{ bazi[0].tiangan.name }}
-                    </div>
-                    <div class="dizhi wuxing-{{ bazi[0].dizhi.wuxing }}">
-                        {{ bazi[0].dizhi.name }}
-                    </div>
-                    {% for cg in bazi[0].dizhi.canggan %}
-                    <div class="canggan wuxing-{{ cg.wuxing }}">
-                        {{ cg.name }}
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-                            <div class="bazi-item">
+                            {% for i in range(4) %}
+                            <div class="bazi-item {% if i == 0 %}year-column{% endif %}">
                                 <div class="bazi-column">
-                                    <div class="tiangan wuxing-{{ bazi[1].tiangan.wuxing }}">
-                                        {{ bazi[1].tiangan.name }}
+                                    <div class="tiangan wuxing-{{ bazi[i].tiangan.color }}">
+                                        {{ bazi[i].tiangan.name }}
+                                        <div class="wuxing-detail"></div>
                                     </div>
-                                    <div class="dizhi wuxing-{{ bazi[1].dizhi.wuxing }}">
-                                        {{ bazi[1].dizhi.name }}
+                                    <div class="dizhi wuxing-{{ bazi[i].dizhi.color }}">
+                                        {{ bazi[i].dizhi.name }}
+                                        <div class="wuxing-detail"></div>
                                     </div>
-                                    {% for cg in bazi[1].dizhi.canggan %}
-                                    <div class="canggan wuxing-{{ cg.wuxing }}">
+                                    {% for cg in bazi[i].dizhi.canggan %}
+                                    <div class="canggan wuxing-{{ cg.color }}">
                                         {{ cg.name }}
+                                        <div class="wuxing-detail"></div>
                                     </div>
                                     {% endfor %}
                                 </div>
                             </div>
-                            <div class="bazi-item">
-                                <div class="bazi-column">
-                                    <div class="tiangan wuxing-{{ bazi[2].tiangan.wuxing }}">
-                                        {{ bazi[2].tiangan.name }}
-                                    </div>
-                                    <div class="dizhi wuxing-{{ bazi[2].dizhi.wuxing }}">
-                                        {{ bazi[2].dizhi.name }}
-                                    </div>
-                                    {% for cg in bazi[2].dizhi.canggan %}
-                                    <div class="canggan wuxing-{{ cg.wuxing }}">
-                                        {{ cg.name }}
-                                    </div>
-                                    {% endfor %}
-                                </div>
-                            </div>
-                            <div class="bazi-item">
-                                <div class="bazi-column">
-                                    <div class="tiangan wuxing-{{ bazi[3].tiangan.wuxing }}">
-                                        {{ bazi[3].tiangan.name }}
-                                    </div>
-                                    <div class="dizhi wuxing-{{ bazi[3].dizhi.wuxing }}">
-                                        {{ bazi[3].dizhi.name }}
-                                    </div>
-                                    {% for cg in bazi[3].dizhi.canggan %}
-                                    <div class="canggan wuxing-{{ cg.wuxing }}">
-                                        {{ cg.name }}
-                                    </div>
-                                    {% endfor %}
-                                </div>
-                            </div>
+                            {% endfor %}
                         </div>
 
                         <h5 class="mt-4 mb-3">大运信息</h5>
