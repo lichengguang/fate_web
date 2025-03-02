@@ -3,7 +3,7 @@
 ## 🛠️ 开发环境配置
 1. 克隆仓库
    ```bash
-   git clone https://github.com/your-repo/fate_web.git
+   git clone https://github.com/lichengguang/fate_web.git
    ```
 2. 安装依赖
    ```bash
@@ -33,7 +33,7 @@
 3. 创建Pull Request
    - 描述功能变更
    - 关联相关issue
-   - 通过CI测试
+   - 通过测试
 
 ## 🐛 问题报告
 - 使用GitHub Issues报告问题

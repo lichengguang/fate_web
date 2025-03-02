@@ -4,6 +4,7 @@
 ### Added
 - 新增CHANGELOG.md文件
 - 在README.md中添加维护说明
+- 新增docs文档
 
 ## [0.9.0] - 2025-02-28
 ### Changed

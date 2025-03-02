@@ -27,11 +27,11 @@ fate_web/
 - error.html：错误页面
 
 ## 测试说明
-- 使用pytest框架
-- 测试文件位于tests目录
+- 使用Python标准库中的unittest框架
+- 测试文件位于tests目录，命名格式为test_*.py
 - 运行测试：
   ```bash
-  pytest tests/
+  python -m unittest discover tests/
   ```
 
 ## 部署说明
