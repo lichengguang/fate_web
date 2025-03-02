@@ -45,3 +45,6 @@ logs/
 # System
 .DS_Store
 Thumbs.db
+
+# Changelog
+!CHANGELOG.md
