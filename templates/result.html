@@ -106,6 +106,39 @@
             padding-top: 20px;
             border-top: 1px solid #eee;
         }
+
+        .info-card {
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .info-card h5 {
+            margin-bottom: 1.5rem;
+            color: #495057;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-weight: bold;
+            color: #666;
+        }
+
+        .info-value {
+            color: #333;
+        }
     </style>
 </head>
 <body>
@@ -117,6 +150,31 @@
                         <h4 class="card-title">八字排盘结果</h4>
                     </div>
                     <div class="card-body">
+                        <!-- 新增个人信息卡片 -->
+                        <div class="info-card">
+                            <h5>个人信息</h5>
+                            <div class="info-item">
+                                <span class="info-label">年龄</span>
+                                <span class="info-value">{{ age }}岁</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">性别</span>
+                                <span class="info-value">{{ gender }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">生肖</span>
+                                <span class="info-value">{{ zodiac }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">出生时间（阳历）</span>
+                                <span class="info-value">{{ birth_time.solar }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">出生时间（农历）</span>
+                                <span class="info-value">{{ birth_time.lunar }}</span>
+                            </div>
+                        </div>
+
                         <h5 class="mb-3">八字信息</h5>
                         <div class="bazi-grid">
                             <div class="bazi-header">
@@ -174,6 +232,32 @@
                                             <span class="badge bg-secondary me-1">{{ liu }}</span>
                                             {% endfor %}
                                         </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        <h5 class="mt-4 mb-3">小运信息</h5>
+                        <table class="table yun-table">
+                            <thead>
+                                <tr>
+                                    <th>年份</th>
+                                    <th>小运</th>
+                                    <th>年龄</th>
+                                    <th>流年</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for xy in xiaoyun_list %}
+                                <tr>
+                                    <td>{{ xy.year }}</td>
+                                    <td>{{ xy.ganzhi }}</td>
+                                    <td>{{ xy.age }}</td>
+                                    <td>
+                                        <span class="badge bg-secondary me-1">
+                                            {{ xy.liunian.ganzhi }} ({{ xy.liunian.wuxing }})
+                                        </span>
                                     </td>
                                 </tr>
                                 {% endfor %}

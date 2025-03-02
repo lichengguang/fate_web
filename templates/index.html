@@ -19,6 +19,13 @@
                     <div class="card-body">
                         <form action="/calculate" method="POST">
                             <div class="mb-3">
+                                <label class="form-label">日期类型</label>
+                                <select class="form-select" name="date_type" required>
+                                    <option value="solar">公历</option>
+                                    <option value="lunar">农历</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
                                 <label for="birth_date" class="form-label">出生日期</label>
                                 <input type="text" class="form-control" id="birth_date" name="birth_date" placeholder="请选择出生日期" required>
                             </div>

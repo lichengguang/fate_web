@@ -13,6 +13,21 @@ class BaziCalculator:
             return False
 
     @staticmethod
+    def validate_lunar_date(year, month, day):
+        """验证农历日期是否有效"""
+        try:
+            lunar = Lunar.fromYmd(year, month, day)
+            return True
+        except:
+            return False
+
+    @staticmethod
+    def lunar_to_solar(year, month, day):
+        """将农历日期转换为阳历日期"""
+        lunar = Lunar.fromYmd(year, month, day)
+        return lunar.getSolar()
+
+    @staticmethod
     def create_date_objects(year, month, day, hour, minute):
         """创建阳历和农历日期对象"""
         solar = Solar.fromYmdHms(year, month, day, hour, minute, 0)
@@ -22,7 +37,7 @@ class BaziCalculator:
     @staticmethod
     def get_formatted_lunar_date(lunar):
         """获取格式化后的农历日期字符串"""
-        return f"{lunar.getYearInGanZhi()}年{lunar.getMonthInChinese()}月{lunar.getDayInChinese()}"
+        return f"{lunar.getYear()}年{lunar.getMonthInChinese()}月{lunar.getDayInChinese()} {lunar.getTimeZhi()}时"
 
     @staticmethod
     def calculate_age(year, birth_year):
@@ -72,10 +87,72 @@ class BaziCalculator:
         '水': 'water'
     }
 
+    @staticmethod
+    def get_wuxing_from_ganzhi(ganzhi):
+        """从干支获取五行"""
+        tiangan = ganzhi[0]
+        dizhi = ganzhi[1] if len(ganzhi) > 1 else ''
+        wuxing = []
+        if tiangan in BaziCalculator.TIANGAN_WUXING:
+            wuxing.append(BaziCalculator.TIANGAN_WUXING[tiangan])
+        if dizhi in BaziCalculator.DIZHI_WUXING:
+            wuxing.append(BaziCalculator.DIZHI_WUXING[dizhi])
+        return '-'.join(wuxing)
+
+    @staticmethod
+    def get_wuxing_color(ganzhi):
+        """从干支获取五行颜色"""
+        wuxing = BaziCalculator.get_wuxing_from_ganzhi(ganzhi)
+        colors = [BaziCalculator.WUXING_COLORS.get(w, '') for w in wuxing.split('-')]
+        return '-'.join(colors)
+
+    @classmethod
+    def get_xiaoyun_info(cls, lunar, gender_num):
+        """获取小运信息"""
+        xiaoyun_list = []
+        yun = lunar.getEightChar().getYun(gender_num)
+        dayun_list = yun.getDaYun()
+        
+        for dy in dayun_list:
+            if not dy.getGanZhi():  # 小运
+                xiaoyun_list = dy.getXiaoYun()
+                break
+        
+        result = []
+        for xy in xiaoyun_list:
+            result.append({
+                "year": xy.getYear(),
+                "ganzhi": xy.getGanZhi(),
+                "age": xy.getAge(),
+                "liunian": {
+                    "ganzhi": xy.getGanZhi(),
+                    "wuxing": cls.get_wuxing_from_ganzhi(xy.getGanZhi()),
+                    "color": cls.get_wuxing_color(xy.getGanZhi())
+                }
+            })
+        return result
+
+    @staticmethod
+    def get_chinese_zodiac(lunar):
+        """获取生肖"""
+        return lunar.getYearShengXiao()
+
+    @staticmethod
+    def get_formatted_birth_time(solar, lunar):
+        """获取格式化后的出生时间"""
+        solar_time = f"{solar.getYear()}年{solar.getMonth()}月{solar.getDay()}日 {solar.getHour()}时{solar.getMinute()}分"
+        lunar_time = BaziCalculator.get_formatted_lunar_date(lunar)
+        return {
+            "solar": solar_time,
+            "lunar": lunar_time
+        }
+
     @classmethod
     def get_bazi_and_luck_info(cls, birth_year, birth_month, birth_day, birth_hour, birth_minute, gender):
-        """获取八字和大运信息"""
+        """获取八字、大运和小运信息"""
         solar, lunar = cls.create_date_objects(birth_year, birth_month, birth_day, birth_hour, birth_minute)
+        zodiac = cls.get_chinese_zodiac(lunar)
+        birth_time = cls.get_formatted_birth_time(solar, lunar)
         current_year = datetime.now().year
         current_age = cls.calculate_age(current_year, birth_year)
         
@@ -121,6 +198,7 @@ class BaziCalculator:
         gender_num = 1 if gender == '男' else 0
         yun = lunar.getEightChar().getYun(gender_num)
 
+        # 获取大运信息
         yun_list = []
         dayun_list = yun.getDaYun()
         for dy in dayun_list:
@@ -133,4 +211,8 @@ class BaziCalculator:
                     "end_year": dy.getEndYear()
                 }
                 yun_list.append(d)
-        return bazi, yun_list
+
+        # 获取小运信息
+        xiaoyun_list = cls.get_xiaoyun_info(lunar, gender_num)
+
+        return bazi, yun_list, xiaoyun_list, zodiac, birth_time, current_age
