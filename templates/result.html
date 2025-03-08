@@ -264,7 +264,23 @@
                             </tbody>
                         </table>
 
-                        <div class="footer-actions text-center">
+                        <div class="ai-analysis-section mt-5">
+    <h5 class="mb-3">AI命理分析</h5>
+    <div class="card">
+        <div class="card-body">
+            <div id="ai-loading" class="text-center" style="display:none;">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">分析中...</span>
+                </div>
+                <p class="mt-2 text-muted">Deepseek-R1正在分析命盘...</p>
+            </div>
+            <div id="ai-result" class="analysis-content"></div>
+            <div id="ai-error" class="alert alert-danger mt-3" style="display:none;"></div>
+        </div>
+    </div>
+</div>
+
+<div class="footer-actions text-center">
                             <a href="/" class="btn btn-primary">重新排盘</a>
                         </div>
 
@@ -277,6 +293,38 @@
     <script src="https://cdn.bootcdn.net/ajax/libs/flatpickr/4.6.13/flatpickr.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/flatpickr/4.6.13/l10n/zh.js"></script>
     <script>
+        // 获取AI分析结果
+        function loadAIAnalysis() {
+            const loadingElem = document.getElementById('ai-loading');
+            const resultElem = document.getElementById('ai-result');
+            const errorElem = document.getElementById('ai-error');
+
+            loadingElem.style.display = 'block';
+            resultElem.innerHTML = '';
+            errorElem.style.display = 'none';
+
+            fetch('/get_ai_analysis')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        errorElem.textContent = '分析失败：' + data.error;
+                        errorElem.style.display = 'block';
+                    } else {
+                        resultElem.innerHTML = data.analysis.replace(/\n/g, '<br>');
+                    }
+                })
+                .catch(error => {
+                    errorElem.textContent = '请求失败：' + error.message;
+                    errorElem.style.display = 'block';
+                })
+                .finally(() => {
+                    loadingElem.style.display = 'none';
+                });
+        }
+
+        // 页面加载完成后自动触发分析
+        window.addEventListener('load', loadAIAnalysis);
+
         // 初始化flatpickr
         flatpickr.localize(flatpickr.l10ns.zh);
         // 添加tooltip提示
