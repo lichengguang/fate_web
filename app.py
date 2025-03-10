@@ -82,7 +82,7 @@ def get_ai_analysis(bazi_data, gender, age, yun_list, xiaoyun_list, zodiac, birt
     
     api_key = os.getenv('DEEPSEEK_API_KEY')
     
-    prompt = f'''以专业命理师身份分析以下八字：
+    prompt = f'''你作为中国传统命理学专家，完整掌握《三命通会》《滴天髓》《渊海子平》《穷通宝鉴》理论体系‌，各派融会贯通，能交叉验证盲派、子平派技法差异‌。 请你对以下命盘进行细致分析:
 【基本命盘】
 年柱：{bazi_data[0]["ganzhi"]}
 月柱：{bazi_data[1]["ganzhi"]}
@@ -96,12 +96,13 @@ def get_ai_analysis(bazi_data, gender, age, yun_list, xiaoyun_list, zodiac, birt
 大运的起运年份：{yun_list[0]['start_year']}
 大运及流年信息：{yun_list}
 
-请按以下结构分析：
-1. 命盘格局分析
-2. 五行强弱分析
-3. 大运走势建议
-4. 流年注意事项
-5. 个性化发展建议
+### 核心分析模块
+列出八字的五行属性，天干、地支、藏干、天干五行、地支五行\纳音、神煞等信息。
+分析角度: 职业、学历、财富、婚姻、健康状况、六亲状况、性情描述...
+定调：对命局有一个简单的论断，确定大的方向。
+过三关：包括父母关、兄弟关、婚姻关。
+解析大运流年：详细分析大运流年，预测人生重大事项。
+你可以综合《渊海子平》《三命通会》《滴天髓阐微》《子平真诠》等书籍的内容，结合命主的信息给出关键的解析，盲派算命也有许多经典口诀，用于推断命主的命运，你也可以使用恰当的口诀来帮助命主理解命局。
 '''
 
 
@@ -111,13 +112,13 @@ def get_ai_analysis(bazi_data, gender, age, yun_list, xiaoyun_list, zodiac, birt
     }
     
     data = {
-        'model': 'deepseek-chat',
+        'model': 'deepseek-reasoner',
         'messages': [{'role': 'user', 'content': prompt}],
         'temperature': 0.7
     }
 
     try:
-        response = requests.post("https://api.deepseek.com/v1/chat/completions?model=deepseek-chat", json=data, headers=headers)
+        response = requests.post("https://api.deepseek.com/v1/chat/completions?model=deepseek-reasoner", json=data, headers=headers)
     
         if response.status_code != 200:
             raise Exception(f"API请求失败: {response.status_code} {response.text}")
