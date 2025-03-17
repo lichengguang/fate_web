@@ -110,26 +110,31 @@ class BaziCalculator:
     def get_xiaoyun_info(cls, lunar, gender_num):
         """获取小运信息"""
         xiaoyun_list = []
+        xiaoyun_liunian_list = []
         yun = lunar.getEightChar().getYun(gender_num)
         dayun_list = yun.getDaYun()
         
         for dy in dayun_list:
             if not dy.getGanZhi():  # 小运
                 xiaoyun_list = dy.getXiaoYun()
+                xiaoyun_liunian_list = dy.getLiuNian()
                 break
         
         result = []
-        for xy in xiaoyun_list:
+        for i in range(len(xiaoyun_list)):
+            xy = xiaoyun_list[i]
+            liunian = xiaoyun_liunian_list[i]
             result.append({
                 "year": xy.getYear(),
                 "ganzhi": xy.getGanZhi(),
                 "age": xy.getAge(),
                 "liunian": {
-                    "ganzhi": xy.getGanZhi(),
-                    "wuxing": cls.get_wuxing_from_ganzhi(xy.getGanZhi()),
-                    "color": cls.get_wuxing_color(xy.getGanZhi())
+                    "ganzhi": liunian.getGanZhi(),
+                    "wuxing": cls.get_wuxing_from_ganzhi(liunian.getGanZhi()),
+                    "color": cls.get_wuxing_color(liunian.getGanZhi())
                 }
             })
+
         return result
 
     @staticmethod
@@ -216,3 +221,19 @@ class BaziCalculator:
         xiaoyun_list = cls.get_xiaoyun_info(lunar, gender_num)
 
         return bazi, yun_list, xiaoyun_list, zodiac, birth_time, current_age
+
+
+if __name__ == "__main__":
+    # 示例用法
+    birth_year = 1993
+    birth_month = 12
+    birth_day = 10
+    birth_hour = 18
+    birth_minute = 0
+    gender = '男'
+    bazi, yun_list, xiaoyun_list, zodiac, birth_time, current_age = BaziCalculator.get_bazi_and_luck_info(birth_year, birth_month, birth_day, birth_hour, birth_minute, gender)
+    # print("八字:", bazi)
+    # print("大运:", yun_list)
+    print("小运:", xiaoyun_list)
+    # print("生肖:", zodiac)
+    # print("出生时间:", birth_time)
