@@ -30,9 +30,3 @@ A: 阳历是公历日期，阴历是农历日期。系统会自动进行转换
 ### Q: 分析结果准确吗？
 A: 系统采用传统命理算法，由AI大模型生成，结果仅供参考。
 
-## 📞 支持与反馈
-
-| 联系方式 | 账号 |
-|------|------|
-|![QQ](https://img.shields.io/badge/QQ群-blue) | 456873369 |
-|![邮箱](https://img.shields.io/badge/邮箱-red) | lcgsmile@qq.com |
