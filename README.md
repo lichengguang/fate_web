@@ -5,7 +5,7 @@
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 ## 📖 项目简介
-这是一个基于Python Flask的八字排盘系统，可以根据用户输入的出生时间生成八字命盘。
+这是一个基于Python Flask的八字排盘系统，可以根据用户输入的出生时间生成八字命盘,并进行AI分析(DeepSeek)。
 
 ## 📚 文档导航
 - [用户手册](docs/USER_GUIDE.md) - 系统使用说明
@@ -25,7 +25,6 @@
 | ✅ 阴阳历转换 | 已完成 |
 | ⏳ 命理AI分析 | 开发中 |
 | ⏳ 纳音计算 | 开发中 |
-| ⏳ 神煞计算 | 开发中 |
 | ⏳ 命理知识库 | 计划中 |
 | ⏳ 用户命盘收藏 | 计划中 |
 
@@ -47,6 +46,17 @@ source venv/bin/activate  # Linux/macOS
 ### 3. 安装依赖
 ```bash
 pip install -r requirements.txt
+```
+
+### 4. 环境配置
+复制示例环境文件并配置：
+```bash
+cp .env.example .env
+```
+按需编辑.env文件中的配置项：
+```ini
+# DeepSeek API Key
+DEEPSEEK_API_KEY=your-secret-key-here
 ```
 
 ## 🎯 使用说明
