@@ -5,10 +5,18 @@
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 ## 📖 项目简介
-这是一个基于Python Flask的八字排盘系统，可以根据用户输入的出生时间生成八字命盘,并进行AI分析(DeepSeek)。
+这是一个基于Python Flask的八字排盘系统，可以根据用户输入的出生时间生成八字命盘,使用DeepSeek并进行AI分析。
 
-![在线演示截图](docs/images/index_demo.png)  
-➡️ [立即体验在线演示](http://120.48.115.239:5000/)
+### 🚀 在线演示
+立即体验完整功能演示：  
+➡️ <a href="http://120.48.115.239:5000/" class="demo-button" target="_blank" rel="noopener noreferrer">点击进入八字排盘系统</a>
+
+**演示功能包含**：
+- 实时八字排盘生成
+- 大运流年计算
+- 生肖年龄查询
+- 阴阳历转换工具
+- 命盘AI分析
 
 ## 📚 文档导航
 - [用户手册](docs/USER_GUIDE.md) - 系统使用说明
@@ -29,7 +37,7 @@
 | ⏳ 命理AI分析 | 开发中 |
 | ⏳ 纳音计算 | 开发中 |
 | ⏳ 命理知识库 | 计划中 |
-| ⏳ 用户命盘收藏 | 计划中 |
+| ⏳ 用户命盘收藏 | 计划中 |p
 
 ## 🛠️ 安装指南
 
