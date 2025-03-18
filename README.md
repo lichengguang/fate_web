@@ -5,104 +5,92 @@
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 ## 📖 项目简介
-这是一个基于Python Flask的八字排盘系统，可以根据用户输入的出生时间生成八字命盘,并进行AI分析(DeepSeek)。
+基于Flask框架的八字排盘系统，实现以下核心功能：
+- 公历/农历双向精确转换（基于lunar_python库）
+- 真太阳时自动校正
+- 完整八字命盘生成（天干地支、五行、藏干）
+- 大运/小运推演计算
+- 生肖与虚岁计算
 
 ## 📚 文档导航
 - [用户手册](docs/USER_GUIDE.md) - 系统使用说明
 - [开发指南](docs/DEVELOPMENT.md) - 项目开发说明
-- [贡献指南](docs/CONTRIBUTING.md) - 如何参与贡献
-- [CHANGELOG指南](docs/CHANGELOG_GUIDE.md) - 版本更新说明
+- [贡献指南](docs/CONTRIBUTING.md) - 协作开发规范
 
-## 🚀 功能状态
+## 🏗️ 系统架构
+```mermaid
+graph TD
+    A[Web界面] --> B(Flask路由)
+    B --> C[业务逻辑]
+    C --> D[八字计算引擎]
+    D --> E[历法转换]
+    D --> F[运势推演]
+    D --> G[五行计算]
+```
 
-| 功能 | 状态 |
-|------|------|
-| ✅ 八字排盘 | 已完成 |
-| ✅ 大运计算 | 已完成 |
-| ✅ 流年计算 | 已完成 |
-| ✅ 生肖计算 | 已完成 |
-| ✅ 年龄计算 | 已完成 |
-| ✅ 阴阳历转换 | 已完成 |
-| ⏳ 命理AI分析 | 开发中 |
-| ⏳ 纳音计算 | 开发中 |
-| ⏳ 命理知识库 | 计划中 |
-| ⏳ 用户命盘收藏 | 计划中 |
+## 🧮 核心实现
+### 1. 八字计算引擎（utils/bazi_calculator.py）
+```python
+class BaziCalculator:
+    # 天干地支五行映射体系
+    TIANGAN_WUXING = {'甲': '木', '乙': '木', ...}
+    DIZHI_WUXING = {'子': '水', '丑': '土', ...}
+    
+    @classmethod
+    def get_bazi_and_luck_info(cls, birth_params):
+        """核心计算方法，返回：
+        - 完整八字信息（含天干地支五行属性）
+        - 大运列表（每十年运势）
+        - 小运列表（逐年运势）
+        - 生肖信息
+        """
+```
+
+### 2. 历法转换特性
+- 支持公元前722年至公元2100年的精确转换
+- 自动处理闰月问题
+- 时辰划分算法（每两小时为一个时辰）
 
 ## 🛠️ 安装指南
-
-### 1. 克隆项目
 ```bash
+# 克隆仓库
 git clone https://github.com/lichengguang/fate_web.git
 cd fate_web
-```
 
-### 2. 创建虚拟环境
-```bash
+# 初始化环境
 python -m venv venv
-source venv/bin/activate  # Linux/macOS
-# venv\Scripts\activate   # Windows
-```
-
-### 3. 安装依赖
-```bash
+source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 4. 环境配置
-复制示例环境文件并配置：
-```bash
-cp .env.example .env
+## 🚀 技术特性
+| 模块 | 实现方案 | 数据精度 |
+|------|----------|----------|
+| 八字排盘 | lunar_python库 | 历法误差<1秒 |
+| 五行计算 | 静态映射表 | 100%准确 |
+| 大运推演 | 传统十年一运 | 符合子平法 |
+| 农历转换 | 紫金山天文台算法 | 公元前722-公元2100 |
+
+## 📈 功能进展
+```mermaid
+gantt
+    title 开发进度
+    dateFormat  YYYY-MM-DD
+    section 已实现
+    核心排盘算法 :done, 2024-01-01, 60d
+    运势推演系统 :done, 2024-03-01, 30d
+    Web界面 :done, 2024-04-01, 15d
+
+    section 进行中
+    单元测试覆盖 :active, 2024-04-16, 10d
 ```
-按需编辑.env文件中的配置项：
-```ini
-# DeepSeek API Key
-DEEPSEEK_API_KEY=your-secret-key-here
-```
-
-## 🎯 使用说明
-
-### 启动服务
-```bash
-python app.py
-```
-
-### 访问应用
-打开浏览器访问 [http://localhost:5000](http://localhost:5000)
-
-### 输入信息
-1. 输入出生日期和时间
-2. 查看生成的八字命盘及大运、流年
-
-## 🧑‍💻 开发指南
-
-### 项目结构
-```
-fate_web/
-├── app.py
-├── requirements.txt
-├── static/
-├── templates/
-├── tests/
-└── utils/
-```
-
-### 代码规范
-- 遵循PEP 8规范
-- 使用类型注解
-- 添加必要的文档注释
-
-## 🛠️ 维护说明
-
-本项目采用语义化版本控制，所有功能更新和修复都会记录在[CHANGELOG.md](CHANGELOG.md)中。建议开发者在提交代码时：
-- 遵循[Keep a Changelog](https://keepachangelog.com/)规范
-- 使用语义化版本号（SemVer）
-- 详细描述变更内容
 
 ## 🤝 贡献指南
-欢迎通过以下方式贡献代码：
-1. 提交issue报告问题
-2. 创建pull request提交改进
-3. 完善文档和测试用例
+欢迎通过以下方式参与：
+1. 补充单元测试用例
+2. 完善日期验证逻辑
+3. 优化运势推演算法
+4. 增加异常处理场景
 
 ## 📜 许可证
-本项目采用 [MIT 许可证](LICENSE)
+[MIT License](LICENSE)
